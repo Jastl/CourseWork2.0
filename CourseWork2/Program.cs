@@ -258,36 +258,6 @@ namespace Registry
             }
         }
 
-        // Manage patient's medical record
-        private static void ManagePatientRecords()
-        {
-            Console.Write("Введіть ім'я пацієнта: ");
-            var name = Console.ReadLine();
-            var patient = patientRepository.GetAll().FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-            if (patient == null)
-            {
-                Console.WriteLine("Пацієнта не знайдено.");
-                return;
-            }
-
-            Console.Write("Введіть нові дані пацієнта: ");
-            patient.Name = Console.ReadLine();
-
-            Console.Write("Введіть нову дату народження (рррр-мм-дд): ");
-            if (DateTime.TryParse(Console.ReadLine(), out var dob))
-            {
-                patient.DateOfBirth = dob;
-                Console.WriteLine("Дані пацієнта оновлено.");
-                SaveData();
-            }
-            else
-            {
-                Console.WriteLine("Невірний формат дати.");
-            }
-        }
-
-        // Add or update doctor schedule
         private static void SetDoctorSchedule()
         {
             Console.Write("Введіть ім'я лікаря для встановлення розкладу: ");
@@ -319,7 +289,6 @@ namespace Registry
             SaveData();
         }
 
-        // Display doctor's schedule
         private static void GetDoctorSchedule()
         {
             Console.Write("Введіть ім'я лікаря: ");
@@ -335,11 +304,6 @@ namespace Registry
                 Console.WriteLine("Розклад для цього лікаря не знайдено.");
             }
         }
-
-
-
-
-
 
         private static void DeleteDoctor()
         {
