@@ -5,5 +5,6 @@
         public Guid Id { get; } = Guid.NewGuid();
         public string Name { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public List<string> Record { get; set; } = new();
     }
 }
