@@ -3,8 +3,8 @@
     public interface IRepository<T> where T : IEntity
     {
         void Add(T entity);
-        void Remove(Guid id);
+        void Remove(int index);
         T GetById(Guid id);
-        IEnumerable<T> GetAll();
+        List<T> GetAll();
     }
 }

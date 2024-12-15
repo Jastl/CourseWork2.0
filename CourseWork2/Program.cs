@@ -13,7 +13,6 @@ namespace Registry
         static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.InputEncoding = System.Text.Encoding.UTF8;
             LoadData();
             while (true)
             {
@@ -27,7 +26,7 @@ namespace Registry
                 Console.WriteLine("7. Видалити пацієнта");
                 Console.WriteLine("8. Знайти лікаря за ім'ям");
                 Console.WriteLine("9. Знайти пацієнта за ім'ям");
-                Console.WriteLine("10. Змінити дані лікаря");
+                Console.WriteLine("10. Оновити дані лікаря");
                 Console.WriteLine("11. Оновити дані пацієнта");
                 Console.WriteLine("12. Додати розклад для лікаря");
                 Console.WriteLine("13. Змінити розклад лікаря");
@@ -42,21 +41,21 @@ namespace Registry
                 {
                     case "1": AddDoctor(); break;
                     case "2": AddPatient(); break;
-                    case "3": ShowAllDoctors(); ShowAllPatients(); CreateAppointment(); break;
+                    case "3": ShowAllDoctors(); Console.WriteLine(); ShowAllPatients(); CreateAppointment(); break;
                     case "4": ShowAllDoctors(); break;
                     case "5": ShowAllPatients(); break;
-                    case "6": DeleteDoctor(); break;
-                    case "7": DeletePatient(); break;
-                    case "8": FindDoctorByName(); break;
-                    case "9": FindPatientByName(); break;
-                    case "10": UpdateDoctor(); break;
-                    case "11": UpdatePatient(); break;
-                    case "12": SetDoctorSchedule(); break;
-                    case "13": UpdateDoctorSchedule(); break;
-                    case "14": GetDoctorSchedule(); break;
-                    case "15": ShowDoctorAppointments(); break;
-                    case "16": ShowPatientRecord(); break;
-                    case "17": UpdatePatientRecord(); break;
+                    case "6": ShowAllDoctors(); DeleteDoctor(); break;
+                    case "7": ShowAllPatients(); DeletePatient(); break;
+                    case "8": FindDoctorByName(); break; //TODO
+                    case "9": FindPatientByName(); break; //TODO
+                    case "10": ShowAllDoctors(); UpdateDoctor(); break;
+                    case "11": ShowAllPatients(); UpdatePatient(); break;
+                    case "12": ShowAllDoctors(); SetDoctorSchedule(); break;
+                    case "13": ShowAllDoctors(); UpdateDoctorSchedule(); break;
+                    case "14": ShowAllDoctors(); GetDoctorSchedule(); break;
+                    case "15": ShowAllDoctors(); ShowDoctorAppointments(); break;
+                    case "16": ShowAllPatients(); ShowPatientRecord(); break;
+                    case "17": ShowAllPatients(); UpdatePatientRecord(); break;
                     case "0": return;
                     default: Console.WriteLine("Невірний вибір."); break;
                 }
@@ -64,13 +63,17 @@ namespace Registry
         }
         private static void UpdatePatientRecord()
         {
-            Console.Write("Введіть ім'я пацієнта: ");
-            var name = Console.ReadLine();
-            var patient = patientRepository.GetAll().FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-            if (patient == null)
+            Console.Write("Введіть індекс пацієнта: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            Patient patient;
+            try
             {
-                Console.WriteLine("Пацієнта не знайдено.");
+                patient = patientRepository.GetAll()[index];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Пацієнта з таким індексом не знайдено");
                 return;
             }
 
@@ -113,13 +116,17 @@ namespace Registry
         }
         private static void UpdatePatient()
         {
-            Console.Write("Введіть ім'я пацієнта для оновлення: ");
-            var name = Console.ReadLine();
-            var patient = patientRepository.GetAll().FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-            if (patient == null)
+            Console.Write("Введіть індекс пацієнта: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            Patient patient;
+            try
             {
-                Console.WriteLine("Пацієнта не знайдено.");
+                patient = patientRepository.GetAll()[index];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Пацієнта з таким індексом не знайдено");
                 return;
             }
 
@@ -141,13 +148,17 @@ namespace Registry
 
         private static void UpdateDoctorSchedule()
         {
-            Console.Write("Введіть ім'я лікаря для оновлення розкладу: ");
-            var name = Console.ReadLine();
-            var doctor = doctorRepository.GetAll().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-            if (doctor == null)
+            Console.Write("Введіть індекс лікаря для оновлення розкладу: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            Doctor doctor;
+            try
             {
-                Console.WriteLine("Лікаря не знайдено.");
+                doctor = doctorRepository.GetAll()[index];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Лікаря з таким індексом не знайденою");
                 return;
             }
 
@@ -174,13 +185,17 @@ namespace Registry
 
         private static void ShowDoctorAppointments()
         {
-            Console.Write("Введіть ім'я лікаря: ");
-            var name = Console.ReadLine();
-            var doctor = doctorRepository.GetAll().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-            if (doctor == null)
+            Console.Write("Введіть індекс лікаря: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            Doctor doctor;
+            try
             {
-                Console.WriteLine("Лікаря не знайдено.");
+                doctor = doctorRepository.GetAll()[index];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Лікаря з таким індексом не знайдено");
                 return;
             }
 
@@ -201,13 +216,17 @@ namespace Registry
 
         private static void ShowPatientRecord()
         {
-            Console.Write("Введіть ім'я пацієнта: ");
-            var name = Console.ReadLine();
-            var patient = patientRepository.GetAll().FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-            if (patient == null)
+            Console.Write("Введіть індекс пацієнта: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            Patient patient;
+            try
             {
-                Console.WriteLine("Пацієнта не знайдено.");
+                patient = patientRepository.GetAll()[index];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Пацієнта з таким індексом не знайдено");
                 return;
             }
 
@@ -228,13 +247,17 @@ namespace Registry
 
         private static void UpdateDoctor()
         {
-            Console.Write("Введіть ім'я лікаря для оновлення: ");
-            var name = Console.ReadLine();
-            var doctor = doctorRepository.GetAll().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-            if (doctor == null)
+            Console.Write("Введіть індекс лікаря: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            Doctor doctor;
+            try
             {
-                Console.WriteLine("Лікаря не знайдено.");
+                doctor = doctorRepository.GetAll()[index];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Лікаря з таким індексом не знайдено");
                 return;
             }
 
@@ -260,13 +283,17 @@ namespace Registry
 
         private static void SetDoctorSchedule()
         {
-            Console.Write("Введіть ім'я лікаря для встановлення розкладу: ");
-            var name = Console.ReadLine();
-            var doctor = doctorRepository.GetAll().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-
-            if (doctor == null)
+            Console.Write("Введіть індекс лікаря для встановлення розкладу: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            Doctor doctor;
+            try
             {
-                Console.WriteLine("Лікаря не знайдено.");
+                doctor = doctorRepository.GetAll()[index];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Лікаря з таким індексом не існує.");
                 return;
             }
 
@@ -291,9 +318,19 @@ namespace Registry
 
         private static void GetDoctorSchedule()
         {
-            Console.Write("Введіть ім'я лікаря: ");
-            var name = Console.ReadLine();
-            var doctor = doctorRepository.GetAll().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+            Console.Write("Введіть індекс лікаря: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            Doctor doctor;
+            try
+            {
+                doctor = doctorRepository.GetAll()[index];
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Лікаря з таким індексом не знайденою");
+                return;
+            }
 
             if (doctor?.WorkSchedule != null)
             {
@@ -307,61 +344,71 @@ namespace Registry
 
         private static void DeleteDoctor()
         {
-            Console.Write("Введіть ім'я лікаря для видалення: ");
-            var name = Console.ReadLine();
-            var doctor = doctorRepository.GetAll().FirstOrDefault(d => d.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            if (doctor != null)
+            Console.Write("Введіть індекс лікаря для видалення: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            try
             {
-                doctorRepository.Remove(doctor.Id);
-                Console.WriteLine("Лікаря видалено.");
-                SaveData();
+                doctorRepository.Remove(index);
             }
-            else
-                Console.WriteLine("Лікаря не знайдено.");
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Лікаря з таким індексом не існує.");
+            }
         }
 
         private static void DeletePatient()
         {
-            Console.Write("Введіть ім'я пацієнта для видалення: ");
-            var name = Console.ReadLine();
-            var patient = patientRepository.GetAll().FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            if (patient != null)
+            Console.Write("Введіть індекс пацієнта для видалення: ");
+            int index;
+            int.TryParse(Console.ReadLine(), out index);
+            try
             {
-                patientRepository.Remove(patient.Id);
-                Console.WriteLine("Пацієнта видалено.");
-                SaveData();
+                patientRepository.Remove(index);
             }
-            else
-                Console.WriteLine("Пацієнта не знайдено.");
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Пацієнта з таким індексом не існує.");
+            }
         }
         private static void FindDoctorByName()
         {
             Console.Write("Введіть ім'я лікаря: ");
             var name = Console.ReadLine();
-            var doctors = doctorRepository.GetAll().Where(d => d.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
-            if (doctors.Any())
-                foreach (var doctor in doctors)
-                    Console.WriteLine($"ID: {doctor.Id}, Ім'я: {doctor.Name}, Спеціалізація: {doctor.Specialization}");
-            else
-                Console.WriteLine("Лікаря не знайдено.");
+            foreach (var doctor in doctorRepository.GetAll())
+            {
+                if (doctor.Name.Contains(name))
+                {
+                    Console.WriteLine($"Index: {doctorRepository.IndexOf(doctor)}, ID: {doctor.Id}, Ім'я: {doctor.Name}, Спеціалізація: {doctor.Specialization}");
+                }
+            }
         }
 
         private static void FindPatientByName()
         {
             Console.Write("Введіть ім'я пацієнта: ");
             var name = Console.ReadLine();
-            var patients = patientRepository.GetAll().Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase)).ToList();
-            if (patients.Any())
-                foreach (var patient in patients)
-                    Console.WriteLine($"ID: {patient.Id}, Ім'я: {patient.Name}, Дата народження: {patient.DateOfBirth:yyyy-MM-dd}");
-            else
-                Console.WriteLine("Пацієнта не знайдено.");
+            foreach (var patient in patientRepository.GetAll())
+            {
+                if (patient.Name.Contains(name))
+                {
+                    Console.WriteLine($"Index: {patientRepository.IndexOf(patient)}, ID: {patient.Id}, Ім'я: {patient.Name}, Спеціалізація: {patient.DateOfBirth}");
+                }
+            }
         }
         private static void AddDoctor()
         {
             Console.Write("Введіть ім'я лікаря: ");
             var name = Console.ReadLine();
-            Validation.ValidateName(name);
+            try
+            {
+                Validation.ValidateName(name);
+            }
+            catch (ArithmeticException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
 
             Console.WriteLine("Оберіть спеціалізацію:");
             foreach (var spec in Enum.GetValues(typeof(Specialization)))
@@ -384,8 +431,16 @@ namespace Registry
         private static void AddPatient()
         {
             Console.Write("Введіть ім'я пацієнта: ");
-            var name = Console.ReadLine();
-            Validation.ValidateName(name);
+            string name = Console.ReadLine();
+            try
+            {
+                Validation.ValidateName(name);
+            }
+            catch (ArithmeticException ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
 
             Console.Write("Введіть дату народження (рррр-мм-дд): ");
             if (!DateTime.TryParse(Console.ReadLine(), out var dateOfBirth))
@@ -412,39 +467,57 @@ namespace Registry
 
         private static void CreateAppointment()
         {
-            Console.Write("ID лікаря: ");
-            var doctorId = Console.ReadLine();
-            Console.Write("ID пацієнта: ");
-            var patientId = Console.ReadLine();
+            Console.Write("Індекс лікаря: ");
+            int doctorIndex;
+            int.TryParse(Console.ReadLine(), out doctorIndex);
+            Console.Write("Індекс пацієнта: ");
+            int patientIndex;
+            int.TryParse(Console.ReadLine(), out patientIndex);
             Console.Write("Дата та час прийому (рррр-мм-дд гг:хх): ");
 
-            if (DateTime.TryParse(Console.ReadLine(), out var dateTime))
-            {
-                var doctor = doctorRepository.GetById(Guid.Parse(doctorId));
-                if (doctor == null || doctor.WorkSchedule == null)
+            try
+            { 
+                if (DateTime.TryParse(Console.ReadLine(), out var dateTime))
                 {
-                    Console.WriteLine("Лікаря не знайдено або розклад не встановлено.");
-                    return;
-                }
-                if (dateTime.TimeOfDay < doctor.WorkSchedule.StartTime.ToTimeSpan() || dateTime.TimeOfDay >= doctor.WorkSchedule.EndTime.ToTimeSpan())
-                {
-                    Console.WriteLine("Прийом поза межами робочого часу.");
-                    return;
-                }
+                    try
+                    {
+                        Validation.ValidateAppointmentDate(dateTime);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                        return;
+                    }
+                    var doctor = doctorRepository.GetAll()[doctorIndex];
+                    if (doctor == null || doctor.WorkSchedule == null)
+                    {
+                        Console.WriteLine("Лікаря не знайдено або розклад не встановлено.");
+                        return;
+                    }
+                    if (dateTime.TimeOfDay < doctor.WorkSchedule.StartTime.ToTimeSpan() || dateTime.TimeOfDay >= doctor.WorkSchedule.EndTime.ToTimeSpan())
+                    {
+                        Console.WriteLine("Прийом поза межами робочого часу.");
+                        return;
+                    }
 
-                appointmentRepository.Add(new Appointment
-                {
-                    DoctorId = doctor.Id,
-                    PatientId = Guid.Parse(patientId),
-                    Date = dateTime
-                });
+                    appointmentRepository.Add(new Appointment
+                    {
+                        DoctorId = doctor.Id,
+                        PatientId = patientRepository.GetAll()[patientIndex].Id,
+                        Date = dateTime
+                    });
 
-                Console.WriteLine("Прийом створено.");
-                SaveData();
+                    Console.WriteLine("Прийом створено.");
+                    SaveData();
+                }
+                else
+                {
+                    Console.WriteLine("Невірний формат дати.");
+                }
             }
-            else
+            catch (ArgumentOutOfRangeException)
             {
-                Console.WriteLine("Невірний формат дати.");
+                Console.WriteLine("Якийсь з індексів не вірний");
             }
         }
 
@@ -452,13 +525,13 @@ namespace Registry
         private static void ShowAllDoctors()
         {
             foreach (var doctor in doctorRepository.GetAll())
-                Console.WriteLine($"ID лікаря: {doctor.Id}, Ім'я: {doctor.Name}, Спеціалізація: {doctor.Specialization}");
+                Console.WriteLine($"Index: {doctorRepository.IndexOf(doctor)}, ID лікаря: {doctor.Id}, Ім'я: {doctor.Name}, Спеціалізація: {doctor.Specialization}");
         }
 
         private static void ShowAllPatients()
         {
             foreach (var patient in patientRepository.GetAll())
-                Console.WriteLine($"ID пацієнта: {patient.Id}, Ім'я: {patient.Name}, Дата народження: {patient.DateOfBirth:yyyy-MM-dd}");
+                Console.WriteLine($"Index: {patientRepository.IndexOf(patient)}, ID пацієнта: {patient.Id}, Ім'я: {patient.Name}, Дата народження: {patient.DateOfBirth:yyyy-MM-dd}");
             }
 
         private static void SaveData()

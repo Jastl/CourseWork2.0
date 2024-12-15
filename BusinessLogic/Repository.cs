@@ -11,10 +11,16 @@
             _items.Add(entity);
         }
 
-        public void Remove(Guid id)
+        public void Remove(int index)
         {
-            var entity = GetById(id);
-            _items.Remove(entity);
+            try
+            {
+                _items.Remove(_items[index]);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                Console.WriteLine("Індексу не існує.");
+            }
         }
 
         public T GetById(Guid id)
@@ -22,6 +28,8 @@
             return _items.FirstOrDefault(e => e.Id == id) ?? throw new KeyNotFoundException("Entity not found.");
         }
 
-        public IEnumerable<T> GetAll() => _items;
+        public List<T> GetAll() => _items;
+
+        public int IndexOf(T item) => _items.IndexOf(item);
     }
 }
